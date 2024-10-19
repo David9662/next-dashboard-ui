@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import React, { useState } from "react";
+import TeacherForm from "./forms/TeacherForm";
 
 export default function FormModal({
   table,
@@ -45,7 +46,7 @@ export default function FormModal({
         <button className="bg-red-700  text-white py-2 px-4 rounded-md border-none w-max self-center">Delete</button>
       </form>
     ) : (
-      "create or update form"
+      <TeacherForm type="create" />
     );
   };
   return (
