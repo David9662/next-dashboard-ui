@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import InputField from "../InputField";
 
 const schema = z.object({
   username: z
@@ -16,12 +17,15 @@ const schema = z.object({
     .min(8, { message: "Password must be atleast 8 characters long!" }),
   firstName: z.string().min(1, { message: "First name is required!" }),
   lastName: z.string().min(1, { message: "Last name is required!" }),
-  phone: z.string().min(1, { message: "Phone name is required!" }),
-  address: z.string().min(1, { message: "Address name is required!" }),
+  phone: z.string().min(1, { message: "Phone  is required!" }),
+  address: z.string().min(1, { message: "Address  is required!" }),
+  bloodType: z.string().min(1, { message: "Blood  is required!" }),
   birthday: z.date({ message: "Birthday name is required!" }),
   sex: z.enum(["male", "female"], { message: "Sex is required!" }),
   img: z.instanceof(File, { message: "Image is required" }),
 });
+
+type Inputs = z.infer<typeof schema>;
 
 export default function TeacherForm({
   type,
@@ -34,7 +38,7 @@ export default function TeacherForm({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(schema) });
+  } = useForm<Inputs>({ resolver: zodResolver(schema) });
 
   const onSubmit = handleSubmit((data) => {
     console.log(data);
@@ -46,24 +50,66 @@ export default function TeacherForm({
       <span className="text-xs text-gray-400 font font-medium">
         Authentication Information
       </span>
-      <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label htmlFor="" className="text-xs text-gray-500">
-            Username
-          </label>
-          <input
-            type="text"
-            {...register("username")}
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-          />
-          {errors.username?.message && (
-            <p className="text-xs text-red-500">
-              {errors.username?.message.toString()}
-            </p>
-      )}
+      <div className="flex justify-between flex-wrap gap-4">
+        <InputField
+          label={"Username"}
+          register={register}
+          error={errors?.username}
+          name={"username"}
+          defaultValue={data?.username}
+        />
+        <InputField
+          label={"Email"}
+          register={register}
+          type="email"
+          error={errors?.email}
+          name={"email"}
+          defaultValue={data?.email}
+        />
+        <InputField
+          label={"Password"}
+          register={register}
+          type="password"
+          error={errors?.password}
+          name={"password"}
+          defaultValue={data?.password}
+        />
       </div>
       <span className="text-xs text-gray-400 font font-medium">
         Personal Information
       </span>
+      <div className="flex justify-between flex-wrap gap-4">
+        <InputField
+          label={"Phone"}
+          register={register}
+          error={errors?.phone}
+          name={"phone"}
+          defaultValue={data?.phone}
+        />
+        <InputField
+          label={"Address"}
+          register={register}
+          error={errors?.address}
+          name={"address"}
+          defaultValue={data?.address}
+        />
+        <InputField
+          label={"Blood Type"}
+          register={register}
+          error={errors?.bloodType}
+          name={"bloodType"}
+          defaultValue={data?.bloodType}
+        />
+        <InputField
+          label={"Birthday"}
+          register={register}
+          error={errors?.birthday}
+          name={"birthday"}
+          defaultValue={data?.birthday}
+          type="date"
+        />
+      </div>
+
       <button className="bg-blue-400 text-white p-2 rounded-md">
         {type === "create" ? "Create" : "Update"}
       </button>
